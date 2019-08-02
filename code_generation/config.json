@@ -1,0 +1,27 @@
+{
+    "moduleName": "reactopya_gallery_jupyter",
+    "moduleVersion": "0.1.0",
+    "widgets": [
+        {
+            "moduleName": "reactopya_gallery",
+            "componentName": "PlotlyExample",
+            "description": "Plotly example",
+            "pythonStateKeys": ["series"],
+            "javaScriptStateKeys": []
+        },
+        {
+            "moduleName": "reactopya_gallery",
+            "componentName": "InteractivePlotlyExample",
+            "description": "Interactive plotly example",
+            "pythonStateKeys": ["series"],
+            "javaScriptStateKeys": ["noise_level", "num_points"]
+        },
+        {
+            "moduleName": "reactopya_gallery",
+            "componentName": "ElectrodeGeometry",
+            "description": "Electrode geometry",
+            "pythonStateKeys": ["locations", "labels", "status", "status_message"],
+            "javaScriptStateKeys": ["path", "download_from"]
+        }
+    ]
+}
