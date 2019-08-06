@@ -6,6 +6,22 @@ Jupyter notebook extension for the reactopy gallery
 
 You must first install the reactopya_gallery Python package. For convenience in development, this package is contained as a git submodule. (Note that the reactopya_gallery submodule contains its own git submodule!).
 
+```
+git clone --recursive [URL to Git repo]
+```
+
+Or if you have already cloned, then do:
+
+```
+git submodule update --init
+```
+
+For subsequent pulls:
+
+```
+git pull --recurse-submodules
+```
+
 Then install this python package
 
 ```
