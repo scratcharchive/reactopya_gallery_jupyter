@@ -13,7 +13,7 @@ var rules = [
                     ["@babel/preset-env",
                         {
                             "targets": {
-                                "chrome": "75"
+                                "chrome": "70"
                             }
                         }],
                     "@babel/preset-react"
@@ -42,14 +42,24 @@ var rules = [
             },
         },
     }
-]
+];
+
+/*
+The react alias below is needed because otherwise it could resolve to
+the wrong one in a subdirectory. Then I get a react hooks error
+because 2 different reacts are being used in the same app.
+See:
+https://reactjs.org/warnings/invalid-hook-call-warning.html
+https://github.com/facebook/react/issues/13991
+*/
 
 const resolve = {
     extensions: ['.css', '.js', '.json', '.png', '.gif', '.jpg', '.svg'],
     alias: {
-        'reactopya': __dirname + '/reactopya_gallery/reactopya/js'
+        'reactopya': __dirname + '/reactopya_gallery/reactopya/js',
+        'react': __dirname + '/node_modules/react' // See above
     }
-}
+};
 
 
 module.exports = [

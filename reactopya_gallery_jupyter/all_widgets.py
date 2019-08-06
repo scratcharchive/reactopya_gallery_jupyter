@@ -7,8 +7,9 @@ import ipywidgets as widgets
 from traitlets import Unicode
 import json
 
-from reactopya_gallery import PlotlyExample as PlotlyExampleOrig
 from reactopya_gallery import InteractivePlotlyExample as InteractivePlotlyExampleOrig
+from reactopya_gallery import Autocorrelograms as AutocorrelogramsOrig
+from reactopya_gallery import PlotlyExample as PlotlyExampleOrig
 from reactopya_gallery import ElectrodeGeometry as ElectrodeGeometryOrig
 
 def _json_parse(x):
@@ -22,41 +23,6 @@ def _json_stringify(x):
         return json.dumps(x)
     except:
         return ''
-
-@widgets.register
-class PlotlyExample(widgets.DOMWidget):
-    """Plotly example"""
-    _view_name = Unicode('PlotlyExampleView').tag(sync=True)
-    _model_name = Unicode('PlotlyExampleModel').tag(sync=True)
-    _view_module = Unicode('reactopya_gallery_jupyter').tag(sync=True)
-    _model_module = Unicode('reactopya_gallery_jupyter').tag(sync=True)
-    _view_module_version = Unicode('^0.1.0').tag(sync=True)
-    _model_module_version = Unicode('^0.1.0').tag(sync=True)
-
-    # python state
-    series = Unicode('').tag(sync=True)
-
-    # javascript state
-
-
-    def __init__(self):
-        super().__init__()
-        self._X = PlotlyExampleOrig()
-        self._X.on_python_state_changed(self._handle_python_state_changed)
-        self.observe(self._on_change)
-        self._X.init_jupyter()
-
-    def _handle_python_state_changed(self):
-        for key in ['series']:
-            val = self._X.get_python_state(key, None)
-            self.set_trait(key, _json_stringify(val))
-
-    def _on_change(self, change):
-        if change.type == 'change':
-            if change.name in []:
-                state0 = dict()
-                state0[change.name] = _json_parse(change.new)
-                self._X._handle_javascript_state_changed(state0)
 
 @widgets.register
 class InteractivePlotlyExample(widgets.DOMWidget):
@@ -90,6 +56,80 @@ class InteractivePlotlyExample(widgets.DOMWidget):
     def _on_change(self, change):
         if change.type == 'change':
             if change.name in ['noise_level', 'num_points']:
+                state0 = dict()
+                state0[change.name] = _json_parse(change.new)
+                self._X._handle_javascript_state_changed(state0)
+
+@widgets.register
+class Autocorrelograms(widgets.DOMWidget):
+    """Autocorrelograms"""
+    _view_name = Unicode('AutocorrelogramsView').tag(sync=True)
+    _model_name = Unicode('AutocorrelogramsModel').tag(sync=True)
+    _view_module = Unicode('reactopya_gallery_jupyter').tag(sync=True)
+    _model_module = Unicode('reactopya_gallery_jupyter').tag(sync=True)
+    _view_module_version = Unicode('^0.1.0').tag(sync=True)
+    _model_module_version = Unicode('^0.1.0').tag(sync=True)
+
+    # python state
+    output = Unicode('').tag(sync=True)
+    status = Unicode('').tag(sync=True)
+    status_message = Unicode('').tag(sync=True)
+
+    # javascript state
+    firingsPath = Unicode('').tag(sync=True)
+    samplerate = Unicode('').tag(sync=True)
+    download_from = Unicode('').tag(sync=True)
+
+    def __init__(self):
+        super().__init__()
+        self._X = AutocorrelogramsOrig()
+        self._X.on_python_state_changed(self._handle_python_state_changed)
+        self.observe(self._on_change)
+        self._X.init_jupyter()
+
+    def _handle_python_state_changed(self):
+        for key in ['output', 'status', 'status_message']:
+            val = self._X.get_python_state(key, None)
+            self.set_trait(key, _json_stringify(val))
+
+    def _on_change(self, change):
+        if change.type == 'change':
+            if change.name in ['firingsPath', 'samplerate', 'download_from']:
+                state0 = dict()
+                state0[change.name] = _json_parse(change.new)
+                self._X._handle_javascript_state_changed(state0)
+
+@widgets.register
+class PlotlyExample(widgets.DOMWidget):
+    """Plotly example"""
+    _view_name = Unicode('PlotlyExampleView').tag(sync=True)
+    _model_name = Unicode('PlotlyExampleModel').tag(sync=True)
+    _view_module = Unicode('reactopya_gallery_jupyter').tag(sync=True)
+    _model_module = Unicode('reactopya_gallery_jupyter').tag(sync=True)
+    _view_module_version = Unicode('^0.1.0').tag(sync=True)
+    _model_module_version = Unicode('^0.1.0').tag(sync=True)
+
+    # python state
+    series = Unicode('').tag(sync=True)
+
+    # javascript state
+
+
+    def __init__(self):
+        super().__init__()
+        self._X = PlotlyExampleOrig()
+        self._X.on_python_state_changed(self._handle_python_state_changed)
+        self.observe(self._on_change)
+        self._X.init_jupyter()
+
+    def _handle_python_state_changed(self):
+        for key in ['series']:
+            val = self._X.get_python_state(key, None)
+            self.set_trait(key, _json_stringify(val))
+
+    def _on_change(self, change):
+        if change.type == 'change':
+            if change.name in []:
                 state0 = dict()
                 state0[change.name] = _json_parse(change.new)
                 self._X._handle_javascript_state_changed(state0)
