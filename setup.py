@@ -10,7 +10,7 @@ setuptools.setup(
     description="",
     packages=setuptools.find_packages(),
     scripts=[],
-    install_requires=[],
+    install_requires=['jupyter'],
     classifiers=(
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: Apache Software License",
