@@ -88,6 +88,9 @@ class Autocorrelograms(widgets.DOMWidget):
     firingsPath = Unicode('').tag(sync=True)
     samplerate = Unicode('').tag(sync=True)
     download_from = Unicode('').tag(sync=True)
+    max_samples = Unicode('').tag(sync=True)
+    bin_size_msec = Unicode('').tag(sync=True)
+    max_dt_msec = Unicode('').tag(sync=True)
 
     def __init__(self, **kwargs):
         super().__init__()
@@ -104,7 +107,7 @@ class Autocorrelograms(widgets.DOMWidget):
 
     def _on_change(self, change):
         if change.type == 'change':
-            if change.name in ['firingsPath', 'samplerate', 'download_from']:
+            if change.name in ['firingsPath', 'samplerate', 'download_from', 'max_samples', 'bin_size_msec', 'max_dt_msec']:
                 state0 = dict()
                 state0[change.name] = _json_parse(change.new)
                 self._X._handle_javascript_state_changed(state0)
