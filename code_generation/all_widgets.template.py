@@ -4,7 +4,7 @@
 ####################################################################
 
 import ipywidgets as widgets
-from traitlets import Unicode
+from traitlets import Unicode, Dict
 import json
 
 {imports}

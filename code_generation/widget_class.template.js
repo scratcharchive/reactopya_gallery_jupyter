@@ -7,6 +7,9 @@ export class {ClassName}Model extends widgets.DOMWidgetModel {
         _model_module_version : '{ModuleVersion}',
         _view_module_version : '{ModuleVersion}',
 
+        // Props
+        _props: {},
+
         // Python state
 {python_state_defaults}
 
@@ -24,7 +27,7 @@ export class {ClassName}View extends widgets.DOMWidgetView {
         this.el.appendChild(this.div);
 
         ReactDOM.render(
-            <{ClassName} jupyterModel={this.model} />,
+            <{ClassName} jupyterModel={this.model} {...this.model.get('_props')} />,
             this.div
         );
     }

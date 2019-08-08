@@ -4,13 +4,15 @@
 ####################################################################
 
 import ipywidgets as widgets
-from traitlets import Unicode
+from traitlets import Unicode, Dict
 import json
 
 from reactopya_gallery import InteractivePlotlyExample as InteractivePlotlyExampleOrig
 from reactopya_gallery import Autocorrelograms as AutocorrelogramsOrig
+from reactopya_gallery import NWBView as NWBViewOrig
 from reactopya_gallery import PlotlyExample as PlotlyExampleOrig
 from reactopya_gallery import ElectrodeGeometry as ElectrodeGeometryOrig
+from reactopya_gallery import TimeseriesView as TimeseriesViewOrig
 
 def _json_parse(x):
     try:
@@ -34,6 +36,9 @@ class InteractivePlotlyExample(widgets.DOMWidget):
     _view_module_version = Unicode('^0.1.0').tag(sync=True)
     _model_module_version = Unicode('^0.1.0').tag(sync=True)
 
+    # props
+    _props = Dict({}).tag(sync=True)
+
     # python state
     series = Unicode('').tag(sync=True)
 
@@ -41,11 +46,12 @@ class InteractivePlotlyExample(widgets.DOMWidget):
     noise_level = Unicode('').tag(sync=True)
     num_points = Unicode('').tag(sync=True)
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         super().__init__()
         self._X = InteractivePlotlyExampleOrig()
         self._X.on_python_state_changed(self._handle_python_state_changed)
         self.observe(self._on_change)
+        self.set_trait('_props', dict(**kwargs))
         self._X.init_jupyter()
 
     def _handle_python_state_changed(self):
@@ -70,6 +76,9 @@ class Autocorrelograms(widgets.DOMWidget):
     _view_module_version = Unicode('^0.1.0').tag(sync=True)
     _model_module_version = Unicode('^0.1.0').tag(sync=True)
 
+    # props
+    _props = Dict({}).tag(sync=True)
+
     # python state
     output = Unicode('').tag(sync=True)
     status = Unicode('').tag(sync=True)
@@ -80,11 +89,12 @@ class Autocorrelograms(widgets.DOMWidget):
     samplerate = Unicode('').tag(sync=True)
     download_from = Unicode('').tag(sync=True)
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         super().__init__()
         self._X = AutocorrelogramsOrig()
         self._X.on_python_state_changed(self._handle_python_state_changed)
         self.observe(self._on_change)
+        self.set_trait('_props', dict(**kwargs))
         self._X.init_jupyter()
 
     def _handle_python_state_changed(self):
@@ -100,6 +110,48 @@ class Autocorrelograms(widgets.DOMWidget):
                 self._X._handle_javascript_state_changed(state0)
 
 @widgets.register
+class NWBView(widgets.DOMWidget):
+    """NWB view"""
+    _view_name = Unicode('NWBViewView').tag(sync=True)
+    _model_name = Unicode('NWBViewModel').tag(sync=True)
+    _view_module = Unicode('reactopya_gallery_jupyter').tag(sync=True)
+    _model_module = Unicode('reactopya_gallery_jupyter').tag(sync=True)
+    _view_module_version = Unicode('^0.1.0').tag(sync=True)
+    _model_module_version = Unicode('^0.1.0').tag(sync=True)
+
+    # props
+    _props = Dict({}).tag(sync=True)
+
+    # python state
+    object = Unicode('').tag(sync=True)
+    status = Unicode('').tag(sync=True)
+    status_message = Unicode('').tag(sync=True)
+
+    # javascript state
+    path = Unicode('').tag(sync=True)
+    download_from = Unicode('').tag(sync=True)
+
+    def __init__(self, **kwargs):
+        super().__init__()
+        self._X = NWBViewOrig()
+        self._X.on_python_state_changed(self._handle_python_state_changed)
+        self.observe(self._on_change)
+        self.set_trait('_props', dict(**kwargs))
+        self._X.init_jupyter()
+
+    def _handle_python_state_changed(self):
+        for key in ['object', 'status', 'status_message']:
+            val = self._X.get_python_state(key, None)
+            self.set_trait(key, _json_stringify(val))
+
+    def _on_change(self, change):
+        if change.type == 'change':
+            if change.name in ['path', 'download_from']:
+                state0 = dict()
+                state0[change.name] = _json_parse(change.new)
+                self._X._handle_javascript_state_changed(state0)
+
+@widgets.register
 class PlotlyExample(widgets.DOMWidget):
     """Plotly example"""
     _view_name = Unicode('PlotlyExampleView').tag(sync=True)
@@ -109,17 +161,21 @@ class PlotlyExample(widgets.DOMWidget):
     _view_module_version = Unicode('^0.1.0').tag(sync=True)
     _model_module_version = Unicode('^0.1.0').tag(sync=True)
 
+    # props
+    _props = Dict({}).tag(sync=True)
+
     # python state
     series = Unicode('').tag(sync=True)
 
     # javascript state
 
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         super().__init__()
         self._X = PlotlyExampleOrig()
         self._X.on_python_state_changed(self._handle_python_state_changed)
         self.observe(self._on_change)
+        self.set_trait('_props', dict(**kwargs))
         self._X.init_jupyter()
 
     def _handle_python_state_changed(self):
@@ -144,6 +200,9 @@ class ElectrodeGeometry(widgets.DOMWidget):
     _view_module_version = Unicode('^0.1.0').tag(sync=True)
     _model_module_version = Unicode('^0.1.0').tag(sync=True)
 
+    # props
+    _props = Dict({}).tag(sync=True)
+
     # python state
     locations = Unicode('').tag(sync=True)
     labels = Unicode('').tag(sync=True)
@@ -154,11 +213,12 @@ class ElectrodeGeometry(widgets.DOMWidget):
     path = Unicode('').tag(sync=True)
     download_from = Unicode('').tag(sync=True)
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         super().__init__()
         self._X = ElectrodeGeometryOrig()
         self._X.on_python_state_changed(self._handle_python_state_changed)
         self.observe(self._on_change)
+        self.set_trait('_props', dict(**kwargs))
         self._X.init_jupyter()
 
     def _handle_python_state_changed(self):
@@ -169,6 +229,52 @@ class ElectrodeGeometry(widgets.DOMWidget):
     def _on_change(self, change):
         if change.type == 'change':
             if change.name in ['path', 'download_from']:
+                state0 = dict()
+                state0[change.name] = _json_parse(change.new)
+                self._X._handle_javascript_state_changed(state0)
+
+@widgets.register
+class TimeseriesView(widgets.DOMWidget):
+    """Timeseries view"""
+    _view_name = Unicode('TimeseriesViewView').tag(sync=True)
+    _model_name = Unicode('TimeseriesViewModel').tag(sync=True)
+    _view_module = Unicode('reactopya_gallery_jupyter').tag(sync=True)
+    _model_module = Unicode('reactopya_gallery_jupyter').tag(sync=True)
+    _view_module_version = Unicode('^0.1.0').tag(sync=True)
+    _model_module_version = Unicode('^0.1.0').tag(sync=True)
+
+    # props
+    _props = Dict({}).tag(sync=True)
+
+    # python state
+    status = Unicode('').tag(sync=True)
+    statusMessage = Unicode('').tag(sync=True)
+    numChannels = Unicode('').tag(sync=True)
+    numTimepoints = Unicode('').tag(sync=True)
+    samplerate = Unicode('').tag(sync=True)
+
+    # javascript state
+    recordingPath = Unicode('').tag(sync=True)
+    download_from = Unicode('').tag(sync=True)
+    segmentSize = Unicode('').tag(sync=True)
+    segmentsRequested = Unicode('').tag(sync=True)
+
+    def __init__(self, **kwargs):
+        super().__init__()
+        self._X = TimeseriesViewOrig()
+        self._X.on_python_state_changed(self._handle_python_state_changed)
+        self.observe(self._on_change)
+        self.set_trait('_props', dict(**kwargs))
+        self._X.init_jupyter()
+
+    def _handle_python_state_changed(self):
+        for key in ['status', 'statusMessage', 'numChannels', 'numTimepoints', 'samplerate']:
+            val = self._X.get_python_state(key, None)
+            self.set_trait(key, _json_stringify(val))
+
+    def _on_change(self, change):
+        if change.type == 'change':
+            if change.name in ['recordingPath', 'download_from', 'segmentSize', 'segmentsRequested']:
                 state0 = dict()
                 state0[change.name] = _json_parse(change.new)
                 self._X._handle_javascript_state_changed(state0)

@@ -8,17 +8,21 @@ class {ClassName}(widgets.DOMWidget):
     _view_module_version = Unicode('^{ModuleVersion}').tag(sync=True)
     _model_module_version = Unicode('^{ModuleVersion}').tag(sync=True)
 
+    # props
+    _props = Dict({}).tag(sync=True)
+
     # python state
 {python_state_variables}
 
     # javascript state
 {javascript_state_variables}
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         super().__init__()
         self._X = {ClassName}Orig()
         self._X.on_python_state_changed(self._handle_python_state_changed)
         self.observe(self._on_change)
+        self.set_trait('_props', dict(**kwargs))
         self._X.init_jupyter()
 
     def _handle_python_state_changed(self):
