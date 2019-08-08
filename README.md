@@ -16,12 +16,6 @@ Or if you have already cloned, then do:
 git submodule update --init
 ```
 
-For subsequent pulls:
-
-```
-git pull --recurse-submodules
-```
-
 Then install this python package
 
 ```
@@ -43,6 +37,21 @@ jupyter notebook
 ```
 
 and open `example_notebooks/reactopya_gallery.ipynb`.
+
+## Update
+
+For subsequent pulls, make sure to recursively pull all submodules:
+
+```
+git pull --recurse-submodules
+```
+
+To apply these changes, run:
+```
+yarn install
+```
+then reload the notebook (both kernel and browser page). This assumes also that the extension was installed as a symlink (i.e., development mode).
+
 
 ## Code generation
 
